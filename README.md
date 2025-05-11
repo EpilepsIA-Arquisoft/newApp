@@ -1,16 +1,19 @@
+# EpilepsIA Main App
 ```bash
+git clone https://github.com/EpilepsIA-Arquisoft/newApp.git
+cd newApp
 pip install virtualenv
-```
-```bash
 python -m venv venv
-```
-
-iniciar venv
-```bash
 venv\Scripts\activate
+pip install -r reqs.txt
 ```
 
 cerrar vevn
 ```
 deactivate
+```
+
+iniciar venv
+```bash
+venv\Scripts\activate
 ```
