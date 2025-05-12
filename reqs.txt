@@ -1,2 +1,5 @@
 django
 djangorestframework
+google-cloud-storage
+pycryptodome
+pika

@@ -5,3 +5,4 @@ from .serializers import SolicitudSerializer
 class SolicitudListCreateView(generics.ListCreateAPIView):
     queryset = Solicitud.objects.all()
     serializer_class = SolicitudSerializer
+
