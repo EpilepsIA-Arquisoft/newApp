@@ -43,11 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'doctor',
     'paciente',
     'resultado',
     'examen',
     'solicitud',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'user.middleware.BlacklistAccessTokenMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -131,3 +135,22 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+AUTH_USER_MODEL = 'user.User'
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'BLACKLIST_AFTER_ROTATION': True,  # Para que los refresh tokens rotados sean blacklisteados automáticamente
+    'BLACKLIST_TOKEN_LIFETIME': timedelta(days=1),  # El tiempo de vida de los tokens blacklisteados
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Por ejemplo, configurar acceso a 5 minutos
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Establecer la duración del refresh token
+    'ROTATE_REFRESH_TOKENS': True,  # Rotación de refresh tokens
+    'UPDATE_LAST_LOGIN': True,  # Actualizar la fecha de último login cuando el refresh token es renovado
+}

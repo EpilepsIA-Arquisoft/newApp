@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import SolicitudListCreateView
+from .views import SolicitudCreateView, SolicitudListView, SolicitudesPorDoctorView
 
 urlpatterns = [
-    path('', SolicitudListCreateView.as_view()),
+    path('', SolicitudCreateView.as_view()),
+    path('', SolicitudListView.as_view()),
+    path('doctor/', SolicitudesPorDoctorView.as_view()),
 ]

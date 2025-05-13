@@ -1,5 +1,4 @@
 import pika
-from .coder import encrypt_json
 
 def connect_rabbitmq(host='10.128.0.20', user='isis2503', password='1234'):
     """
@@ -15,6 +14,8 @@ def connect_rabbitmq(host='10.128.0.20', user='isis2503', password='1234'):
     return channel
 
 def publish_message(queue_name, message, channel=connect_rabbitmq()):
+    from .coder import encrypt_json
+
     """
     Declara la cola (la crea si no existe) y envía el mensaje cifrado.
     """

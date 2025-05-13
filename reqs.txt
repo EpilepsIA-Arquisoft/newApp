@@ -3,3 +3,5 @@ djangorestframework
 google-cloud-storage
 pycryptodome
 pika
+djangorestframework-simplejwt
+djangorestframework-simplejwt[blacklist]

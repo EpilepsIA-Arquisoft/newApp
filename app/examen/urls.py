@@ -1,8 +1,10 @@
 from django.urls import path
-from .views import CrearResultadoExamenView, ExamenListCreateView
+from .views import ResultadoExamenCreateView, ExamenCreateView, ExamenListView, ResultadoExamenDetailView
 
 urlpatterns = [
-    path('', ExamenListCreateView.as_view()),
-    path('<int:examen_id>/resultado/', CrearResultadoExamenView.as_view()),  # Endpoint para crear el resultado de un examen
+    path('', ExamenCreateView.as_view()),
+    path('', ExamenListView.as_view()),
+    path('<int:examen_id>/resultado/', ResultadoExamenCreateView.as_view()),
+    path('<int:examen_id>/resultado/', ResultadoExamenDetailView.as_view()),
 
 ]
