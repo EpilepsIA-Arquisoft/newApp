@@ -38,4 +38,4 @@ msj={
     "test":"test"
 }
 connect_rabbitmq()
-#publish_message('map_requests',msj)
+publish_message('map_requests',msj)
