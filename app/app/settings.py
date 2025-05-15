@@ -153,7 +153,7 @@ from datetime import timedelta
 SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,  # Para que los refresh tokens rotados sean blacklisteados automáticamente
     'BLACKLIST_TOKEN_LIFETIME': timedelta(days=1),  # El tiempo de vida de los tokens blacklisteados
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Por ejemplo, configurar acceso a 5 minutos
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Por ejemplo, configurar acceso a 5 minutos
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Establecer la duración del refresh token
     'ROTATE_REFRESH_TOKENS': True,  # Rotación de refresh tokens
     'UPDATE_LAST_LOGIN': True,  # Actualizar la fecha de último login cuando el refresh token es renovado
