@@ -16,8 +16,8 @@ def load_keys(file_path="keys.json"):
     }
     return keys
 
-def encrypt_json(data, keys):
-    load_keys()
+def encrypt_json(data, keys=None):
+    keys = load_keys()
     # Convertir diccionario a string JSON
     json_str = json.dumps(data)
 
