@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-md!x0)+n@(lc=xqj%=577f70a#78+%-8n58$1c+8^5g+s2_rpm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -89,8 +89,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'epilepsia_db',
+	'USER': 'isis2503',
+	'PASSWORD': 'isis2503',
+	'HOST': '10.128.0.3',
+	'PORT': '5432'
     }
 }
 
