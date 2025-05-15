@@ -5,14 +5,20 @@ import hashlib
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 
-def load_keys(file_path="keys.json"):
+# Claves secretas
+KEY = b'abcdefghijklmnop'  # AES key (16 bytes)
+HMAC_KEY = b'supersecretkey123'  # HMAC key
+
+IV = b'0000000000000000'  # Vector de inicialización
+
+def load_keys(file_path="rabbit_writer/keys.json"):
     with open(file_path, "r") as f:
         keys_data = json.load(f)
 
     keys = {
-        "KEY": base64.b64decode(keys_data["KEY"]),
-        "HMAC_KEY": base64.b64decode(keys_data["HMAC_KEY"]),
-        "IV": base64.b64decode(keys_data["IV"])
+        "KEY": KEY,
+        "HMAC_KEY": HMAC_KEY,
+        "IV": IV
     }
     return keys
 
