@@ -34,8 +34,8 @@ def publish_message(queue_name, message, channel=None):
 
 
 
-msj={
-    "test":"test"
-}
-connect_rabbitmq()
-publish_message('map_requests',msj)
+#msj={
+#    "test":"test"
+#}
+#connect_rabbitmq()
+#publish_message('map_requests',msj)
