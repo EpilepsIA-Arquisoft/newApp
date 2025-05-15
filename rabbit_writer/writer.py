@@ -1,31 +1,29 @@
 import pika
 
-def connect_rabbitmq(host='10.128.0.20', user='isis2503', password='1234'):
-    """
-    Establece conexión con RabbitMQ y retorna un canal.
-    """
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(
-            host=host,
-            credentials=pika.PlainCredentials(user, password)
+def connect_rabbitmq(host='35.226.31.227', user='isis2503', password='1234'):
+    import pika
+    try:
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(
+                host=host,
+                credentials=pika.PlainCredentials(user, password)
+            )
         )
-    )
-    channel = connection.channel()
-    return channel
+        channel = connection.channel()
+        return channel
+    except pika.exceptions.AMQPConnectionError as e:
+        print("Error al conectar con RabbitMQ:", e)
+        raise
 
-def publish_message(queue_name, message, channel=connect_rabbitmq()):
+
+def publish_message(queue_name, message, channel=None):
     from .coder import encrypt_json
 
-    """
-    Declara la cola (la crea si no existe) y envía el mensaje cifrado.
-    """
-    # Crear la cola si no existe
+    if channel is None:
+        channel = connect_rabbitmq()
+
     channel.queue_declare(queue=queue_name, durable=True, exclusive=False, auto_delete=False)
-
-    # Cifrar el mensaje
     encrypted_message = encrypt_json(message)
-
-    # Publicar en la cola
     channel.basic_publish(
         exchange='',
         routing_key=queue_name,
@@ -33,3 +31,11 @@ def publish_message(queue_name, message, channel=connect_rabbitmq()):
         properties=pika.BasicProperties(delivery_mode=2)  # Persistente
     )
     print(f"Mensaje publicado en la cola '{queue_name}'")
+
+
+
+msj={
+    "test":"test"
+}
+connect_rabbitmq()
+#publish_message('map_requests',msj)
