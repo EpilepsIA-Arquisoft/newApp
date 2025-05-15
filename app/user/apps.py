@@ -3,6 +3,7 @@ from django.db.utils import OperationalError
 from django.contrib.auth import get_user_model
 from django.core.exceptions import AppRegistryNotReady
 
+
 class UserConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'user'
@@ -16,7 +17,9 @@ class UserConfig(AppConfig):
             User = get_user_model()
             usuarios = [
                 {"id": "admin", "nombre": "admin", "rol": "admin", "password": "0000"},
-                {"id": "doctor", "nombre": "doctor", "rol": "doctor", "password": "0000"},
+                {"id": "doctor1", "nombre": "doctor1", "rol": "doctor", "password": "0000"},
+                {"id": "doctor2", "nombre": "doctor2", "rol": "doctor", "password": "0000"},
+                {"id": "doctor3", "nombre": "doctor3", "rol": "doctor", "password": "0000"},
                 {"id": "reducer", "nombre": "Bot Reducer", "rol": "reducer", "password": "0000"},
                 {"id": "uploader", "nombre": "Bot Uploader", "rol": "uploader", "password": "0000"},
             ]
@@ -34,7 +37,10 @@ class UserConfig(AppConfig):
                 # Crear objeto Doctor si el usuario tiene ese rol
                 if u["rol"] == "doctor":
                     try:
-                        from doctor.models import Doctor
+                        from paciente.models import Paciente
+                        Paciente.objects.create(nombre="Paciente1", edad=30, doctor=user)
+                        Paciente.objects.create(nombre="Paciente2", edad=31, doctor=user)
+                        Paciente.objects.create(nombre="Paciente3", edad=32, doctor=user)
                         #if not Doctor.objects.filter(user=user).exists():
                             #Doctor.objects.create(user=user, nombre=user.nombre)
                     except AppRegistryNotReady:
