@@ -32,7 +32,10 @@ class ResultadoExamenCreateView(APIView):
 class ResultadoExamenDetailView(APIView):
     permission_classes = [IsAuthenticated, RolePermissionFactory(['admin',"doctor"])]
     def get(self, request, examen_id, *args, **kwargs):
+        user= request.user
         examen = get_object_or_404(Examen, id=examen_id)
+        if user!=examen.paciente.doctor:
+            return Response({"detail": "No tienes permiso para ver este examen."}, status=status.HTTP_403_FORBIDDEN)
         resultado = examen.resultado
         
         if resultado:

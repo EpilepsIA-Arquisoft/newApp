@@ -38,11 +38,12 @@ class UserConfig(AppConfig):
                 if u["rol"] == "doctor":
                     try:
                         from paciente.models import Paciente
-                        Paciente.objects.create(nombre="Paciente1", edad=30, doctor=user)
-                        Paciente.objects.create(nombre="Paciente2", edad=31, doctor=user)
-                        Paciente.objects.create(nombre="Paciente3", edad=32, doctor=user)
-                        #if not Doctor.objects.filter(user=user).exists():
-                            #Doctor.objects.create(user=user, nombre=user.nombre)
+                        if not Paciente.objects.filter(id="paciente1_"+u["id"]).exists():
+                            Paciente.objects.create(id="paciente1_"+u["id"],nombre="Paciente1", edad=30, doctor=user)
+                        if not Paciente.objects.filter(id="paciente2_"+u["id"]).exists():
+                            Paciente.objects.create(id="paciente2_"+u["id"],nombre="Paciente2", edad=30, doctor=user)
+                        if not Paciente.objects.filter(id="paciente3_"+u["id"]).exists():
+                            Paciente.objects.create(id="paciente3_"+u["id"],nombre="Paciente3", edad=30, doctor=user)
                     except AppRegistryNotReady:
                         pass
 

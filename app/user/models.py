@@ -34,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'id'
-    REQUIRED_FIELDS = ['nombre']
+    REQUIRED_FIELDS = ['nombre', 'rol']
 
     def __str__(self):
         return f"{self.nombre} ({self.rol})"

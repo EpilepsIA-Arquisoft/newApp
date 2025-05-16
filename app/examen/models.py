@@ -12,12 +12,15 @@ TIPO_EXAMEN_CHOICES = [
 ]
 
 class Examen(models.Model):
+    id = models.CharField(primary_key=True, max_length=50, unique=True)
     fecha = models.DateField(default=date.today)
     tipo = models.CharField(max_length=100, choices=TIPO_EXAMEN_CHOICES)
     archivo = models.FileField(upload_to='examenes_temp/', default=None)
     url = models.URLField(null=True, blank=True)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, default=None)
     resultado = models.ForeignKey(Resultado, on_delete=models.CASCADE, null=True, blank=True)
+    
+    REQUIRED_FIELDS = ['id', 'tipo', 'archivo', 'paciente']
 
     def __str__(self):
         return self.id
