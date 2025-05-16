@@ -22,6 +22,7 @@ class UserConfig(AppConfig):
                 {"id": "doctor3", "nombre": "doctor3", "rol": "doctor", "password": "0000"},
                 {"id": "reducer", "nombre": "Bot Reducer", "rol": "reducer", "password": "0000"},
                 {"id": "uploader", "nombre": "Bot Uploader", "rol": "uploader", "password": "0000"},
+                {"id": "hacker", "nombre": "hacker", "rol": "hacker", "password": "0000"},
             ]
 
             for u in usuarios:
