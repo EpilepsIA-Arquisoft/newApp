@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'examen',
     'solicitud',
     'user',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'user.middleware.BlacklistAccessTokenMiddleware',
+    'corsheaders.middleware.common.CommonMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'app.urls'
 
