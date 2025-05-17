@@ -1,8 +1,9 @@
 from django.db import models
 from user.models import User
+import uuid
 
 class Paciente(models.Model):
-    id = models.CharField(primary_key=True, max_length=50, unique=True)
+    id = models.CharField(primary_key=True, max_length=50, unique=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
     edad = models.IntegerField(default=0)
     doctor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

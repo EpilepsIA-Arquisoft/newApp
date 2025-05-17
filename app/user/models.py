@@ -1,10 +1,12 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+import uuid
+
 
 class UserManager(BaseUserManager):
     def create_user(self, id, nombre, password=None, rol='doctor'):
-        if not id:
-            raise ValueError('El usuario debe tener un id')
+        #if not id:
+            #raise ValueError('El usuario debe tener un id')
         user = self.model(id=id, nombre=nombre, rol=rol)
         user.set_password(password)
         user.save(using=self._db)
@@ -25,7 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('admin', 'Admin'),
     )
 
-    id = models.CharField(primary_key=True, max_length=50, unique=True)
+    id = models.CharField(primary_key=True, max_length=50, unique=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100)
     rol = models.CharField(max_length=10, choices=ROL_CHOICES, default=None)
     is_active = models.BooleanField(default=True)

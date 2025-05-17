@@ -4,12 +4,14 @@ from requests import Response
 from user.models import User
 from examen.models import Examen
 from rest_framework import status
+import uuid
+
 
 TIPO_SOLICITUD_CHOICES = [
     ('rev','revision de picos'),
 ]
 class Solicitud(models.Model):
-    id = models.CharField(primary_key=True, max_length=50, unique=True)
+    id = models.CharField(primary_key=True, max_length=50, unique=True, default=uuid.uuid4, editable=False)
     fecha = models.DateField(default=date.today)
     doctor = models.ForeignKey(User, on_delete=models.CASCADE)
     examen = models.ForeignKey(Examen, on_delete=models.CASCADE)
