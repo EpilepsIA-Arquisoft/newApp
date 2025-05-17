@@ -29,8 +29,10 @@ class Examen(models.Model):
     def save(self, *args, **kwargs):
         try:
             subir_archivo = self.archivo and not self.url
-
             super().save(*args, **kwargs)
+            
+            if self.resultado:
+                super().save(update_fields=["resultado"])
 
             if subir_archivo:
                 # Obtén la ruta local del archivo subido
@@ -48,13 +50,11 @@ class Examen(models.Model):
 
                 # Actualiza el campo urlAcceso y guarda de nuevo el objeto
                 self.url = public_url
-                super().save(update_fields=["url"])
-            else:
-                # Si el archivo ya existe, solo actualiza la URL
-                raise Exception("xd")
+                self.resultado = Resultado.objects.create(respuesta="#")
+                
+                super().save(update_fields=["url","resultado"])
+
         except Exception as e:
             print(f"Error al subir el archivo: {e}")
             self.delete()
             raise e
-        
-

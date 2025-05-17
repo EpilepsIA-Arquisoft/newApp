@@ -14,28 +14,28 @@ class UserConfig(AppConfig):
             return  # evita error si las migraciones aún no se corrieron
 
         try:
+            
             User = get_user_model()
             usuarios = [
-                {"id": "admin", "nombre": "admin", "rol": "admin", "password": "0000"},
-                {"id": "doctor1", "nombre": "doctor1", "rol": "doctor", "password": "0000"},
-                {"id": "doctor2", "nombre": "doctor2", "rol": "doctor", "password": "0000"},
-                {"id": "doctor3", "nombre": "doctor3", "rol": "doctor", "password": "0000"},
-                {"id": "reducer", "nombre": "Bot Reducer", "rol": "reducer", "password": "0000"},
-                {"id": "uploader", "nombre": "Bot Uploader", "rol": "uploader", "password": "0000"},
-                {"id": "hacker", "nombre": "hacker", "rol": "hacker", "password": "0000"},
+                {"id": "admin1", "username": "admin", "nombre": "admin", "rol": "admin", "password": "0000"},
+                {"id": "doctor1", "username": "doctor1", "nombre": "doctor1", "rol": "doctor", "password": "0000"},
+                {"id": "doctor2", "username": "doctor2", "nombre": "doctor2", "rol": "doctor", "password": "0000"},
+                {"id": "doctor3", "username": "doctor3", "nombre": "doctor3", "rol": "doctor", "password": "0000"},
+                {"id": "reducer", "username": "reducer", "nombre": "Bot Reducer", "rol": "reducer", "password": "0000"},
+                {"id": "uploader", "username": "uploader", "nombre": "Bot Uploader", "rol": "uploader", "password": "0000"},
+                {"id": "hacker", "username": "hacker", "nombre": "hacker", "rol": "hacker", "password": "0000"},
             ]
 
             for u in usuarios:
                 if not User.objects.filter(id=u["id"]).exists():
                     if u["rol"] == "admin":
-                        user = User.objects.create_superuser(id=u["id"], nombre=u["nombre"], password=u["password"])
+                        user = User.objects.create_superuser(id=u["id"], username=u["username"], nombre=u["nombre"], password=u["password"])
                     else:
-                        user = User.objects.create_user(id=u["id"], nombre=u["nombre"], password=u["password"], rol=u["rol"])
+                        user = User.objects.create_user(id=u["id"], username=u["username"], nombre=u["nombre"], password=u["password"], rol=u["rol"])
 
                 else:
                     user = User.objects.get(id=u["id"])
 
-                # Crear objeto Doctor si el usuario tiene ese rol
                 if u["rol"] == "doctor":
                     try:
                         from paciente.models import Paciente
@@ -50,3 +50,6 @@ class UserConfig(AppConfig):
 
         except OperationalError:
             pass
+        except AppRegistryNotReady:
+            pass
+        

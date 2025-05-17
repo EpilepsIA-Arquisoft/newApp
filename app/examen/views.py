@@ -20,11 +20,13 @@ class ExamenCreateView(generics.CreateAPIView):
 class ResultadoExamenCreateView(APIView):
     permission_classes = [IsAuthenticated, RolePermissionFactory(['admin', 'reducer'])]
     def post(self, request, examen_id, *args, **kwargs):
-        get_object_or_404(Examen, id=examen_id)
+        examen = get_object_or_404(Examen, id=examen_id)
         serializer = ResultadoSerializer(data=request.data)
         
         if serializer.is_valid():
             serializer.save()
+            examen.resultado = serializer.instance
+            examen.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

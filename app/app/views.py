@@ -7,8 +7,8 @@ def index(request):
     return render(request, 'index.html')
 
 def health_check(request):
-    health_check_1()
-    #health_check_2()
+    health_check_1(request)
+    #health_check_2(request
 
 def health_check_1(request):
     return JsonResponse({'message': 'OK'}, status=200)

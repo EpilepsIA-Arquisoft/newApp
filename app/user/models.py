@@ -4,16 +4,16 @@ import uuid
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, id, nombre, password=None, rol='doctor'):
+    def create_user(self, id, username, nombre, password=None, rol='doctor'):
         #if not id:
             #raise ValueError('El usuario debe tener un id')
-        user = self.model(id=id, nombre=nombre, rol=rol)
+        user = self.model(id=id, username=username, nombre=nombre, rol=rol)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, id, nombre, password=None):
-        user = self.create_user(id=id, nombre=nombre, password=password, rol='admin')
+    def create_superuser(self, id, username, nombre, password=None):
+        user = self.create_user(id=id, username=username, nombre=nombre, password=password, rol='admin')
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
@@ -28,6 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.CharField(primary_key=True, max_length=50, unique=True, default=uuid.uuid4, editable=False)
+    username = models.CharField(max_length=100, unique=True)
     nombre = models.CharField(max_length=100)
     rol = models.CharField(max_length=10, choices=ROL_CHOICES, default=None)
     is_active = models.BooleanField(default=True)
@@ -35,8 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'id'
-    REQUIRED_FIELDS = ['nombre', 'rol']
+    USERNAME_FIELD = 'username'
 
     def __str__(self):
         return f"{self.nombre} ({self.rol})"
