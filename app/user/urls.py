@@ -17,5 +17,5 @@ urlpatterns = [
     #path('doctor/dashboard/', DoctorDashboardView.as_view(), name='doctor_dashboard'),
     #path('bot/reducer/task/', BotReducerTaskView.as_view(), name='bot_reducer_task'),
     #path('bot/examen-uploader/task/', BotExamenUploaderTaskView.as_view(), name='bot_examen_uploader_task'),
-    #path('user/', AdminListUsersView.as_view(), name='admin_panel'),
+    path('user/', AdminListUsersView.as_view(), name='admin_panel'),
 ]
