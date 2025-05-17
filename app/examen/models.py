@@ -26,26 +26,29 @@ class Examen(models.Model):
         return self.id
     
     def save(self, *args, **kwargs):
-        subir_archivo = self.archivo and not self.url
+        try:
+            subir_archivo = self.archivo and not self.url
 
-        super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
 
-        if subir_archivo:
-            # Obtén la ruta local del archivo subido
-            local_path = self.archivo.path
-            destination_blob_name = f"completos/examen_{self.id}.edf"
+            if subir_archivo:
+                # Obtén la ruta local del archivo subido
+                local_path = self.archivo.path
+                destination_blob_name = f"completos/examen_{self.id}.edf"
 
-            # Llama a la función que sube el archivo al bucket
-            upload(
-                self.id,
-                local_path,
-                destination_blob_name
-            )
+                # Llama a la función que sube el archivo al bucket
+                upload(
+                    self.id,
+                    local_path,
+                    destination_blob_name
+                )
 
-            public_url = f"https://storage.googleapis.com/examenes-eeg/{destination_blob_name}"
+                public_url = f"https://storage.googleapis.com/examenes-eeg/{destination_blob_name}"
 
-            # Actualiza el campo urlAcceso y guarda de nuevo el objeto
-            self.url = public_url
-            super().save(update_fields=["url"])
-
+                # Actualiza el campo urlAcceso y guarda de nuevo el objeto
+                self.url = public_url
+                super().save(update_fields=["url"])
+        except Exception as e:
+            print(f"Error al subir el archivo: {e}")
+            self.delete()
 
