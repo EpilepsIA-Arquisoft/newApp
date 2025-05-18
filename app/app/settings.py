@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if(True):
+if(False):
     # Para pruebas locales
     DATABASES = {
         'default': {
