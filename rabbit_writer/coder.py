@@ -12,8 +12,8 @@ HMAC_KEY = b'supersecretkey123'  # HMAC key
 IV = b'0000000000000000'  # Vector de inicialización
 
 def load_keys(file_path="rabbit_writer/keys.json"):
-    with open(file_path, "r") as f:
-        keys_data = json.load(f)
+    #with open(file_path, "r") as f:
+    #    keys_data = json.load(f)
 
     keys = {
         "KEY": KEY,

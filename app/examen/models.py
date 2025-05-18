@@ -50,9 +50,9 @@ class Examen(models.Model):
 
                 # Actualiza el campo urlAcceso y guarda de nuevo el objeto
                 self.url = public_url
-                self.resultado = Resultado.objects.create(respuesta="#")
+                #self.resultado = Resultado.objects.create(respuesta="#")
                 
-                super().save(update_fields=["url","resultado"])
+                super().save(update_fields=["url"])
 
         except Exception as e:
             print(f"Error al subir el archivo: {e}")

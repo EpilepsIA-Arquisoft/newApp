@@ -17,7 +17,7 @@ def connect_rabbitmq(host='35.226.31.227', user='isis2503', password='1234'):
 
 
 def publish_message(queue_name, message, channel=None):
-    from coder import encrypt_json
+    from .coder import encrypt_json
 
     if channel is None:
         channel = connect_rabbitmq()

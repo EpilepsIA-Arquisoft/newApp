@@ -16,9 +16,13 @@ class SolicitudListView(generics.ListAPIView):
     serializer_class = SolicitudSerializer
     
 class SolicitudCreateView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated, RolePermissionFactory(['admin'])]
+    permission_classes = [IsAuthenticated, RolePermissionFactory(['admin', 'doctor'])]
     queryset = Solicitud.objects.all()
     serializer_class = SolicitudSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(doctor=self.request.user)
+
 
 class SolicitudesPorDoctorView(APIView):
     permission_classes = [IsAuthenticated, RolePermissionFactory(['doctor'])]
