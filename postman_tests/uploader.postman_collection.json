@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "950a1bad-5eaf-4668-a231-57547bb51188",
+		"name": "uploader",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43735362",
+		"_collection_link": "https://j-9916918.postman.co/workspace/J's-Workspace~63b0bec8-4992-4c16-81e0-822e9ff83417/collection/43735362-950a1bad-5eaf-4668-a231-57547bb51188?action=share&source=collection_link&creator=43735362"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"// Guardar los valores deseados como variables globales o de entorno\r",
+							"pm.environment.set(\"refresh_token\", jsonData.refresh);\r",
+							"pm.environment.set(\"access_token\", jsonData.access);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "uploader",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "0000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}login/",
+					"host": [
+						"{{host}}login"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "examen",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"// Guardar los valores deseados como variables globales o de entorno\r",
+							"pm.environment.set(\"id_examen\", jsonData.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "examen_1_test_5",
+							"type": "text"
+						},
+						{
+							"key": "tipo",
+							"value": "EEG",
+							"type": "text"
+						},
+						{
+							"key": "archivo",
+							"type": "file",
+							"src": "/C:/Users/juanf/OneDrive - Universidad de los andes/UNI/S5/2 Arquisoft/EEG/Raw_EDF_Files/p10_Record1.edf"
+						},
+						{
+							"key": "paciente",
+							"value": "paciente1_doctor1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}examen/upload/",
+					"host": [
+						"{{host}}examen"
+					],
+					"path": [
+						"upload",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDc1MzMyLCJpYXQiOjE3NDcwNzUwMzIsImp0aSI6IjRkZDkxZDU1MmI0MDQ4NWZhOWQ0ZGViYWRmNjZlNjNiIiwidXNlcl9pZCI6ImFkbWluIn0.g-7GbgravTjXXYbqTIq71U9I148hrTAGa0tpUrbnxVI",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "refresh",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}logout/",
+					"host": [
+						"{{host}}logout"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

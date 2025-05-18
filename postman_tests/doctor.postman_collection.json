@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "52704391-0727-493b-99b0-3ca5494bfd3d",
+		"name": "doctor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43735362",
+		"_collection_link": "https://j-9916918.postman.co/workspace/J's-Workspace~63b0bec8-4992-4c16-81e0-822e9ff83417/collection/43735362-52704391-0727-493b-99b0-3ca5494bfd3d?action=share&source=collection_link&creator=43735362"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parsear el cuerpo de la respuesta como JSON\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"// Guardar los valores deseados como variables globales o de entorno\r",
+							"pm.environment.set(\"refresh_token\", jsonData.refresh);\r",
+							"pm.environment.set(\"access_token\", jsonData.access);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "doctor2",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "0000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}login/",
+					"host": [
+						"{{host}}login"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resultados de un examen",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}examen/{{id_examen}}/resultado",
+					"host": [
+						"{{host}}examen"
+					],
+					"path": [
+						"{{id_examen}}",
+						"resultado"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "solicitud",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "examen",
+							"value": "{{id_examen}}",
+							"type": "text"
+						},
+						{
+							"key": "tipo",
+							"value": "rev",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}solicitud/",
+					"host": [
+						"{{host}}solicitud"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "solicitudes",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}solicitud/doctor/",
+					"host": [
+						"{{host}}solicitud"
+					],
+					"path": [
+						"doctor",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pacientes",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}paciente/doctor/",
+					"host": [
+						"{{host}}paciente"
+					],
+					"path": [
+						"doctor",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDc1MzMyLCJpYXQiOjE3NDcwNzUwMzIsImp0aSI6IjRkZDkxZDU1MmI0MDQ4NWZhOWQ0ZGViYWRmNjZlNjNiIiwidXNlcl9pZCI6ImFkbWluIn0.g-7GbgravTjXXYbqTIq71U9I148hrTAGa0tpUrbnxVI",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "refresh",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}logout/",
+					"host": [
+						"{{host}}logout"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
