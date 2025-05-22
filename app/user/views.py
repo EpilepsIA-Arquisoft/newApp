@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
 from django.contrib.auth import get_user_model
 from .models import BlacklistedToken
@@ -29,31 +30,71 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
-
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def post(self, request):
         try:
-            # Obtener el access token y el refresh token de los encabezados
-            access_token = request.headers.get("Authorization").split(" ")[1]
+            # Verificar el header de autorización
+            auth_header = request.headers.get("Authorization")
+            if not auth_header or not auth_header.startswith("Bearer "):
+                return Response(
+                    {"detail": "Token de acceso no proporcionado o formato inválido"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Extraer el access token
+            access_token = auth_header.split(" ")[1]
+            
+            # Verificar el refresh token en el body
             refresh_token = request.data.get("refresh")
-
-            # Verificar que el refresh token esté presente
             if not refresh_token:
-                return Response({"detail": "No se proporcionó refresh token"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"detail": "Refresh token no proporcionado"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-            # Invalidar el refresh token (blacklist)
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+            try:
+                # Intentar invalidar el refresh token
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+            except TokenError:
+                return Response(
+                    {"detail": "Refresh token inválido o expirado"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-            # Invalidate the access token by adding it to the blacklist
+            # Verificar si el access token ya está en la blacklist
+            if BlacklistedToken.objects.filter(token=access_token).exists():
+                return Response(
+                    {"detail": "Token de acceso ya ha sido invalidado"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Agregar el access token a la blacklist
             BlacklistedToken.objects.create(token=access_token)
 
-            return Response({"detail": "Logout exitoso"}, status=status.HTTP_205_RESET_CONTENT)
+            # Crear la respuesta
+            response = Response(
+                {"detail": "Logout exitoso"},
+                status=status.HTTP_205_RESET_CONTENT
+            )
+
+            # Limpiar las cookies si existen
+            response.delete_cookie('access_token')
+            response.delete_cookie('refresh_token')
+
+            return response
 
         except Exception as e:
-            return Response({"detail": "Error durante el logout", "error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {
+                    "detail": "Error durante el proceso de logout",
+                    "error": str(e)
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 # Vista para obtener los datos del usuario autenticado
 class CurrentUserView(APIView):
