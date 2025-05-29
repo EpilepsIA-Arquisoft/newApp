@@ -5,7 +5,35 @@ from .models import BlacklistedToken, UserActivity
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.utils import timezone
+from django.db import connection
+from django.conf import settings
 import json
+import time
+from django.db.utils import OperationalError
+
+class DatabaseConnectionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.retries = getattr(settings, 'DB_CONNECTION_RETRIES', 3)
+        self.retry_delay = getattr(settings, 'DB_CONNECTION_RETRY_DELAY', 5)
+
+    def __call__(self, request):
+        for attempt in range(self.retries):
+            try:
+                # Verificar la conexión
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT 1")
+                break
+            except OperationalError:
+                if attempt == self.retries - 1:
+                    return JsonResponse(
+                        {"detail": "Error de conexión a la base de datos"},
+                        status=503
+                    )
+                time.sleep(self.retry_delay)
+        
+        response = self.get_response(request)
+        return response
 
 class BlacklistAccessTokenMiddleware:
     def __init__(self, get_response):

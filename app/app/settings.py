@@ -52,12 +52,23 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+else:
+    # Configuración para desarrollo local con SSL
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_PROXY_SSL_HEADER = None
 
 # Configuración CORS
 CORS_ALLOWED_ORIGINS = [
-    f"https://{GCP_PUBLIC_IP}",
+    "https://localhost:3000",
+    "https://127.0.0.1:3000",
+    "https://localhost:8000",
+    "https://127.0.0.1:8000",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -102,6 +113,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_otp',
     'django_otp.plugins.otp_totp',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -114,6 +126,7 @@ MIDDLEWARE = [
     'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'user.middleware.DatabaseConnectionMiddleware',
     'user.middleware.BlacklistAccessTokenMiddleware',
     'user.middleware.SecurityMiddleware',
 ]
@@ -141,7 +154,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if(False):
+if(True):
     # Para pruebas locales
     DATABASES = {
         'default': {
@@ -246,19 +259,40 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configuración de logging
+# Crear directorio de logs si no existe
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+Path(LOGS_DIR).mkdir(exist_ok=True)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+            'filename': os.path.join(LOGS_DIR, 'debug.log'),
+            'formatter': 'verbose',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'user': {
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': True,
         },
