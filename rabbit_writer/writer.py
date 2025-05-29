@@ -1,6 +1,6 @@
 import pika
 
-def connect_rabbitmq(host='35.226.31.227', user='isis2503', password='1234'):
+def connect_rabbitmq(host='10.128.0.9', user='isis2503', password='1234'):
     import pika
     try:
         connection = pika.BlockingConnection(
